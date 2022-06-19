@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     EditText enteredAnswer;
     Button buttonClick;
     int userFinalScore;
+    AtomicInteger attemptTime = new AtomicInteger();
     Random random = new Random();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         buttonClick = findViewById(R.id.checkButton);
         firstNum =  findViewById(R.id.firstNumber);
         secondNum = findViewById(R.id.secondNumber);
-        AtomicInteger attemptTime = new AtomicInteger();
         enteredAnswer =(EditText)findViewById(R.id.enterAnswer);
         buttonClick.setOnClickListener(view -> {
             String userAnswer = enteredAnswer.getText().toString();
             attemptTime.set(attemptTime.get() + 1);
             checkResults(userAnswer);
+
         });
     }
     private void checkResults(String userAnswer) {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 disResult.setText("you are right!");
                 userRank.setText(""+ userFinalScore);
                 if(Integer.parseInt(userRank.getText().toString()) == 10){
-                    Toast.makeText(this, "Congrats u have scored 10 points", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Congrats u have scored 10 points out of "+attemptTime.get(), Toast.LENGTH_SHORT).show();
                     userRank.setText(""+0);
                 }
                 else {
