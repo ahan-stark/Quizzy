@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 userFinalScore = userFinalScore + 1;
                 disResult.setText("you are right!");
                 userRank.setText(""+ userFinalScore);
-                if(Integer.parseInt(userRank.getText().toString()) == 3){
+                if(Integer.parseInt(userRank.getText().toString()) == 10){
                     Toast.makeText(this, "You have scored 10 points out of "+attemptTime.get()+"attempts", Toast.LENGTH_SHORT).show();
                     userFinalScore = 0;
                     userRank.setText(""+userFinalScore);
