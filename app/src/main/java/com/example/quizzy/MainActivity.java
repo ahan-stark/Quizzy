@@ -2,6 +2,8 @@ package com.example.quizzy;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +14,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
-    TextView firstNum, secondNum, disResult, userRank;
+    TextView firstNum, secondNum, disResult, userRank,lastScore;
     EditText enteredAnswer;
     Button buttonClick;
     int userFinalScore;
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharePref",Context.MODE_PRIVATE);
+        lastScore = findViewById(R.id.prevScore);
         firstNum =  findViewById(R.id.firstNumber);
         secondNum = findViewById(R.id.secondNumber);
         generateRandomNumbers();
@@ -31,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         firstNum =  findViewById(R.id.firstNumber);
         secondNum = findViewById(R.id.secondNumber);
         enteredAnswer =(EditText)findViewById(R.id.enterAnswer);
+        //fetching previous score from sharedPreference file
+        int sc = sharedPreferences.getInt("prevScore",0);
+        lastScore.setText(""+sc);
         buttonClick.setOnClickListener(view -> {
             String userAnswer = enteredAnswer.getText().toString();
             attemptTime.set(attemptTime.get() + 1);
@@ -49,10 +56,17 @@ public class MainActivity extends AppCompatActivity {
                 userFinalScore = userFinalScore + 1;
                 disResult.setText("you are right!");
                 userRank.setText(""+ userFinalScore);
-                if(Integer.parseInt(userRank.getText().toString()) == 10){
+                if(Integer.parseInt(userRank.getText().toString()) == 3){
+                    SharedPreferences sharedPreferences = getSharedPreferences("MySharePref",Context.MODE_PRIVATE);
+                    int finalPreviousAttempt = attemptTime.get();
                     Toast.makeText(this, "You have scored 10 points out of "+attemptTime.get()+"attempts", Toast.LENGTH_SHORT).show();
                     userFinalScore = 0;
+                    //inserting previous score to sharedPreferences
+                    sharedPreferences.edit().putInt("prevScore",finalPreviousAttempt).commit();
+                    int sc = sharedPreferences.getInt("prevScore",0);
+                    lastScore.setText(""+sc);
                     userRank.setText(""+userFinalScore);
+
                     attemptTime.set(0);
                     generateRandomNumbers();
                 }
