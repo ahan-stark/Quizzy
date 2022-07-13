@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ahana/AndroidStudioProjects/Quizzy/app/src/main/res/layout/activity_display_result.xml" value="0.1859375" />
         <entry key="..\:/Users/ahana/AndroidStudioProjects/Quizzy/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/ahana/AndroidStudioProjects/Quizzy/app/src/main/res/layout/activity_splash.xml" value="0.2" />
+        <entry key="..\:/Users/ahana/AndroidStudioProjects/Quizzy/app/src/main/res/layout/activity_startgame.xml" value="0.2" />
+        <entry key="..\:/Users/ahana/AndroidStudioProjects/Quizzy/app/src/main/res/layout/activity_time_mode.xml" value="0.1859375" />
       </map>
     </option>
   </component>
