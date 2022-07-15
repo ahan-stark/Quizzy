@@ -11,8 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -56,6 +59,10 @@ public class timeMode extends AppCompatActivity {
                 Intent gotoWinnerPage = new Intent(timeMode.this,displayResult.class);
 //                SharedPreferences sharedPreferences = getSharedPreferences("MySharePref", Context.MODE_PRIVATE);
                 int finalPreviousAttempt = attemptTime.get();
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                String dateTime = (dateFormat.format(cal.getTime()));
                 //userFinalScore = 0;
                 //inserting previous score to sharedPreferences
 //                sharedPreferences.edit().putInt("prevScore", finalPreviousAttempt).commit();
@@ -67,6 +74,7 @@ public class timeMode extends AppCompatActivity {
 //                    attemptTime.set(0);
 //                    generateRandomNumbers();
                 gotoWinnerPage.putExtra("finalscore",userFinalScoreInString);
+                gotoWinnerPage.putExtra("date",dateTime);
                 startActivity(gotoWinnerPage);
             }
         }.start();
