@@ -1,15 +1,20 @@
 package com.example.quizzy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.quizzy.database.AppDatabase;
+import com.example.quizzy.entity.Highscore;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -73,8 +78,15 @@ public class timeMode extends AppCompatActivity {
 //
 //                    attemptTime.set(0);
 //                    generateRandomNumbers();
+                Long currentDate = System.currentTimeMillis() ;
+                AsyncTask.execute(() -> {
+                    AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                            AppDatabase.class, "user-database").build();
+                    db.scoreDAO().insertAll(new Highscore(currentDate, userFinalScore));
+
+                });
                 gotoWinnerPage.putExtra("finalscore",userFinalScoreInString);
-                gotoWinnerPage.putExtra("date",dateTime);
+                gotoWinnerPage.putExtra("date",System.currentTimeMillis());
                 startActivity(gotoWinnerPage);
             }
         }.start();

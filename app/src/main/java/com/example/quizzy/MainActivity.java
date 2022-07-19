@@ -1,14 +1,19 @@
 package com.example.quizzy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.quizzy.database.AppDatabase;
+import com.example.quizzy.entity.Highscore;
+import com.example.quizzy.entity.PracticeHighScore;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MainActivity extends AppCompatActivity {
     TextView firstNum, secondNum, disResult, userRank, lastScore;
     EditText enteredAnswer;
-    Button buttonClick;
+    Button buttonClick, doneForNow;
     int userFinalScore = 0;
     AtomicInteger attemptTime = new AtomicInteger();
     Random random = new Random();
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         buttonClick = findViewById(R.id.checkButton);
         firstNum = findViewById(R.id.firstNumber);
         secondNum = findViewById(R.id.secondNumber);
+        doneForNow = findViewById(R.id.doneForNow);
         enteredAnswer = (EditText) findViewById(R.id.enterAnswer);
         //fetching previous score from sharedPreference file
 //        int sc = sharedPreferences.getInt("prevScore", 0);
@@ -44,6 +50,24 @@ public class MainActivity extends AppCompatActivity {
             attemptTime.set(attemptTime.get() + 1);
             checkResults(userAnswer);
 
+        });
+        doneForNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Long currentDate = System.currentTimeMillis() ;
+                AsyncTask.execute(() -> {
+                    AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                            AppDatabase.class, "user-database").build();
+                    db.practiceDAO().insert(new PracticeHighScore(currentDate, userFinalScore));
+
+                });
+
+                Intent doneForNowintent = new Intent(MainActivity.this,displayResult.class);
+                String userFinalScoreInString = String.valueOf(userFinalScore);
+                doneForNowintent.putExtra("finalscore",userFinalScoreInString);
+                doneForNowintent.putExtra("date",System.currentTimeMillis());
+                startActivity(doneForNowintent);
+            }
         });
     }
 
@@ -92,4 +116,5 @@ public class MainActivity extends AppCompatActivity {
         firstNum.setText(stringRandomNumber1);
         secondNum.setText(stringRandomNumber2);
     }
+
 }
